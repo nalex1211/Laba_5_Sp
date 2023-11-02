@@ -39,17 +39,20 @@
       know about them.  */
    enum yytokentype {
      IDENTIFIER = 258,
-     NUMBER = 259,
-     INT = 260,
-     ASSIGN = 261,
-     SEMICOLON = 262,
-     MAIN = 263,
-     LEFT_BRACE = 264,
-     RIGHT_BRACE = 265,
-     RETURN = 266,
-     COMMA = 267,
-     LEFT_PAREN = 268,
-     RIGHT_PAREN = 269
+     STRING = 259,
+     NUMBER = 260,
+     INT = 261,
+     ASSIGN = 262,
+     SEMICOLON = 263,
+     MAIN = 264,
+     LEFT_BRACE = 265,
+     RIGHT_BRACE = 266,
+     RETURN = 267,
+     COMMA = 268,
+     LEFT_PAREN = 269,
+     RIGHT_PAREN = 270,
+     COUT = 271,
+     OUTPUT = 272
    };
 #endif
 
@@ -60,7 +63,7 @@ typedef union YYSTYPE
 {
 
 /* Line 1685 of yacc.c  */
-#line 14 "C:/CLion Projects/Laba_5/parser.y"
+#line 20 "parser.y"
 
     int intValue;
     char* strValue;
@@ -68,7 +71,7 @@ typedef union YYSTYPE
 
 
 /* Line 1685 of yacc.c  */
-#line 72 "C:/CLion Projects/Laba_5/cmake-build-debug/parser.tab.h"
+#line 75 "parser.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
