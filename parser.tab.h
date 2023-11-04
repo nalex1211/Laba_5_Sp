@@ -52,7 +52,9 @@
      LEFT_PAREN = 269,
      RIGHT_PAREN = 270,
      COUT = 271,
-     OUTPUT = 272
+     OUTPUT = 272,
+     CIN = 273,
+     INPUT = 274
    };
 #endif
 
@@ -71,7 +73,7 @@ typedef union YYSTYPE
 
 
 /* Line 1685 of yacc.c  */
-#line 75 "parser.tab.h"
+#line 77 "parser.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

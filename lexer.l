@@ -19,6 +19,8 @@ extern int yyparse(void);
 "="                         { return ASSIGN; }
 "cout"                      { return COUT; }
 "<<"                        { return OUTPUT; }
+"cin"                        { return CIN; }
+">>"                         { return INPUT; }
 \"[^"]*\"   {
                yylval.strValue = strdup(yytext);
                return STRING;

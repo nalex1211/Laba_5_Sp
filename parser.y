@@ -31,6 +31,7 @@ extern FILE *yyin;
 %token COMMA
 %token LEFT_PAREN RIGHT_PAREN
 %token COUT OUTPUT
+%token CIN INPUT
 %left OUTPUT
 
 %left '+' '-'
@@ -52,6 +53,8 @@ statement:
     declaration SEMICOLON
     | declaration { yyerror("Cannot run the program, semicolon is missing after declaration"); }
     | assignment SEMICOLON
+    | cin_statement SEMICOLON
+    | cin_statement { yyerror("Cannot run the program, semicolon is missing after cin statement"); }
     | expression SEMICOLON { outputBuffer << "Expression result: " << $1 << "\n"; }
     | cout_statement SEMICOLON
     | RETURN expression SEMICOLON { outputBuffer << "Return value: " << $2 << "\n"; }
@@ -119,6 +122,22 @@ cout_statement:
     }
     ;
 
+cin_statement:
+    CIN INPUT IDENTIFIER {
+        int temp;
+        std::cout << "Enter value for " << $3 << ": ";
+        std::cin >> temp;
+        variables[$3] = temp;
+        free($3);
+    }
+    | cin_statement INPUT IDENTIFIER {
+        int temp;
+        std::cout << "Enter value for " << $3 << ": ";
+        std::cin >> temp;
+        variables[$3] = temp;
+        free($3);
+    }
+    ;
 %%
 int main() {
     std::string line;
@@ -157,4 +176,3 @@ void checkErrors() {
         exit(1);
     }
 }
-
