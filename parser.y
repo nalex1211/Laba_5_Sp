@@ -6,6 +6,7 @@
 #include <iostream>
 #include <sstream>
 #include <map>
+#include <cstdio>
 
 std::map<std::string, int> variables;
 bool errorOccurred = false;
@@ -46,7 +47,7 @@ program:
 
 statement_list:
     statement_list statement
-    | /* empty */
+    |
     ;
 
 statement:
@@ -105,7 +106,7 @@ cout_statement:
         outputBuffer << $3;
     }
     | COUT OUTPUT STRING {
-        std::string strValue = std::string($3).substr(1, strlen($3) - 2); // Remove quotes
+        std::string strValue = std::string($3).substr(1, strlen($3) - 2);
         outputBuffer << strValue;
     }
     | cout_statement OUTPUT expression {
@@ -114,7 +115,7 @@ cout_statement:
         outputBuffer << $3;
     }
     | cout_statement OUTPUT STRING {
-        std::string strValue = std::string($3).substr(1, strlen($3) - 2); // Remove quotes
+        std::string strValue = std::string($3).substr(1, strlen($3) - 2);
         if (outputBuffer.str().back() != ' ' && !strValue.empty() && strValue[0] != ' ') {
             outputBuffer << " ";
         }
@@ -139,22 +140,61 @@ cin_statement:
     }
     ;
 %%
-int main() {
+int main(int argc, char *argv[]) {
+    int choice;
     std::string line;
     std::stringstream accumulatedInput;
+    std::cout << "Select input method:\n";
+    std::cout << "1. Enter code via terminal\n";
+    std::cout << "2. Read code from a text file\n";
+    std::cout << "Enter choice (1 or 2): ";
+    std::cin >> choice;
+    std::cin.ignore();
 
-    std::cout << "Enter your code (type 'end' to finish):\n";
-    while (true) {
-        std::getline(std::cin, line);
-        if (line == "end") {
-            break;
+    if (choice == 1) {
+        std::cout << "Enter your code (type 'end' to finish):\n";
+           while (true) {
+               std::getline(std::cin, line);
+               if (line == "end") {
+                   break;
+               }
+               accumulatedInput << line << '\n';
+           }
+           yy_scan_string(accumulatedInput.str().c_str());
+    } else if (choice == 2) {
+        std::string filepath;
+        bool fileOpened = false;
+        while (!fileOpened) {
+            std::cout << "Enter the path to the text file (or type 'exit' to quit): ";
+            std::getline(std::cin, filepath);
+
+            if (filepath == "exit") {
+                break;
+            }
+            yyin = fopen(filepath.c_str(), "r");
+
+            if (yyin) {
+                fileOpened = true;
+            } else {
+                perror("Error opening file");
+                std::cout << "Please try again or type 'exit' to quit.\n";
+            }
         }
-        accumulatedInput << line << '\n';
+        if (!fileOpened) {
+            std::cout << "No file was opened. Exiting program." << std::endl;
+            return 1;
+        }
+    } else {
+        std::cerr << "Invalid choice." << std::endl;
+        return 1;
     }
 
-    yy_scan_string(accumulatedInput.str().c_str());
     errorOccurred = false;
     yyparse();
+
+    if (yyin != nullptr) {
+        fclose(yyin);
+    }
 
     if (errorOccurred) {
         std::cerr << errorBuffer.str();

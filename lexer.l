@@ -32,7 +32,7 @@ extern int yyparse(void);
 "main"                      { return MAIN; }
 "return"                    { return RETURN; }
 [a-zA-Z][a-zA-Z0-9]*       { yylval.strValue = strdup(yytext); return IDENTIFIER; }
-[ \t\n]+                    { /* Ignore whitespace and newlines */ }
-.                           { /* Handle other characters */ }
+[ \t\n]+                    {  }
+.                           {  }
 
 %%

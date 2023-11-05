@@ -76,6 +76,7 @@
 #include <iostream>
 #include <sstream>
 #include <map>
+#include <cstdio>
 
 std::map<std::string, int> variables;
 bool errorOccurred = false;
@@ -89,7 +90,7 @@ extern FILE *yyin;
 
 
 /* Line 189 of yacc.c  */
-#line 93 "parser.tab.c"
+#line 94 "parser.tab.c"
 
 /* Enabling traces.  */
 #ifndef YYDEBUG
@@ -143,7 +144,7 @@ typedef union YYSTYPE
 {
 
 /* Line 214 of yacc.c  */
-#line 20 "parser.y"
+#line 21 "parser.y"
 
     int intValue;
     char* strValue;
@@ -151,7 +152,7 @@ typedef union YYSTYPE
 
 
 /* Line 214 of yacc.c  */
-#line 155 "parser.tab.c"
+#line 156 "parser.tab.c"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
@@ -163,7 +164,7 @@ typedef union YYSTYPE
 
 
 /* Line 264 of yacc.c  */
-#line 167 "parser.tab.c"
+#line 168 "parser.tab.c"
 
 #ifdef short
 # undef short
@@ -460,10 +461,10 @@ static const yytype_int8 yyrhs[] =
 /* YYRLINE[YYN] -- source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    43,    43,    44,    48,    49,    53,    54,    55,    56,
-      57,    58,    59,    60,    61,    65,    66,    70,    71,    72,
-      80,    88,    89,    96,    97,    98,    99,   100,   104,   107,
-     111,   116,   126,   133
+       0,    44,    44,    45,    49,    50,    54,    55,    56,    57,
+      58,    59,    60,    61,    62,    66,    67,    71,    72,    73,
+      81,    89,    90,    97,    98,    99,   100,   101,   105,   108,
+     112,   117,   127,   134
 };
 #endif
 
@@ -1414,70 +1415,70 @@ yyreduce:
         case 7:
 
 /* Line 1464 of yacc.c  */
-#line 54 "parser.y"
+#line 55 "parser.y"
     { yyerror("Cannot run the program, semicolon is missing after declaration"); ;}
     break;
 
   case 10:
 
 /* Line 1464 of yacc.c  */
-#line 57 "parser.y"
+#line 58 "parser.y"
     { yyerror("Cannot run the program, semicolon is missing after cin statement"); ;}
     break;
 
   case 11:
 
 /* Line 1464 of yacc.c  */
-#line 58 "parser.y"
+#line 59 "parser.y"
     { outputBuffer << "Expression result: " << (yyvsp[(1) - (2)].intValue) << "\n"; ;}
     break;
 
   case 13:
 
 /* Line 1464 of yacc.c  */
-#line 60 "parser.y"
+#line 61 "parser.y"
     { outputBuffer << "Return value: " << (yyvsp[(2) - (3)].intValue) << "\n"; ;}
     break;
 
   case 14:
 
 /* Line 1464 of yacc.c  */
-#line 61 "parser.y"
+#line 62 "parser.y"
     { yyerror("Syntax error"); ;}
     break;
 
   case 15:
 
 /* Line 1464 of yacc.c  */
-#line 65 "parser.y"
+#line 66 "parser.y"
     { outputBuffer << "Declaration completed\n"; ;}
     break;
 
   case 16:
 
 /* Line 1464 of yacc.c  */
-#line 66 "parser.y"
+#line 67 "parser.y"
     { outputBuffer << "Type declaration without variable\n"; ;}
     break;
 
   case 17:
 
 /* Line 1464 of yacc.c  */
-#line 70 "parser.y"
+#line 71 "parser.y"
     { outputBuffer << "Declared variable: " << (yyvsp[(3) - (3)].strValue) << "\n"; ;}
     break;
 
   case 18:
 
 /* Line 1464 of yacc.c  */
-#line 71 "parser.y"
+#line 72 "parser.y"
     { outputBuffer << "Declared variable: " << (yyvsp[(1) - (1)].strValue) << "\n"; ;}
     break;
 
   case 19:
 
 /* Line 1464 of yacc.c  */
-#line 72 "parser.y"
+#line 73 "parser.y"
     {
         variables[(yyvsp[(1) - (3)].strValue)] = (yyvsp[(3) - (3)].intValue);
         outputBuffer << "Declared and assigned: " << (yyvsp[(1) - (3)].strValue) << " = " << (yyvsp[(3) - (3)].intValue) << "\n";
@@ -1488,7 +1489,7 @@ yyreduce:
   case 20:
 
 /* Line 1464 of yacc.c  */
-#line 80 "parser.y"
+#line 81 "parser.y"
     {
         variables[(yyvsp[(1) - (3)].strValue)] = (yyvsp[(3) - (3)].intValue);
         outputBuffer << "Assigned " << (yyvsp[(1) - (3)].strValue) << " = " << (yyvsp[(3) - (3)].intValue) << "\n";
@@ -1499,7 +1500,7 @@ yyreduce:
   case 22:
 
 /* Line 1464 of yacc.c  */
-#line 89 "parser.y"
+#line 90 "parser.y"
     {
         if(variables.find((yyvsp[(1) - (1)].strValue)) != variables.end()) {
             (yyval.intValue) = variables[(yyvsp[(1) - (1)].strValue)];
@@ -1512,42 +1513,42 @@ yyreduce:
   case 23:
 
 /* Line 1464 of yacc.c  */
-#line 96 "parser.y"
+#line 97 "parser.y"
     { (yyval.intValue) = (yyvsp[(1) - (3)].intValue) + (yyvsp[(3) - (3)].intValue); ;}
     break;
 
   case 24:
 
 /* Line 1464 of yacc.c  */
-#line 97 "parser.y"
+#line 98 "parser.y"
     { (yyval.intValue) = (yyvsp[(1) - (3)].intValue) - (yyvsp[(3) - (3)].intValue); ;}
     break;
 
   case 25:
 
 /* Line 1464 of yacc.c  */
-#line 98 "parser.y"
+#line 99 "parser.y"
     { (yyval.intValue) = (yyvsp[(1) - (3)].intValue) * (yyvsp[(3) - (3)].intValue); ;}
     break;
 
   case 26:
 
 /* Line 1464 of yacc.c  */
-#line 99 "parser.y"
+#line 100 "parser.y"
     { (yyval.intValue) = (yyvsp[(1) - (3)].intValue) / (yyvsp[(3) - (3)].intValue); ;}
     break;
 
   case 27:
 
 /* Line 1464 of yacc.c  */
-#line 100 "parser.y"
+#line 101 "parser.y"
     { (yyval.intValue) = (yyvsp[(2) - (3)].intValue); ;}
     break;
 
   case 28:
 
 /* Line 1464 of yacc.c  */
-#line 104 "parser.y"
+#line 105 "parser.y"
     {
         outputBuffer << (yyvsp[(3) - (3)].intValue);
     ;}
@@ -1556,7 +1557,7 @@ yyreduce:
   case 29:
 
 /* Line 1464 of yacc.c  */
-#line 107 "parser.y"
+#line 108 "parser.y"
     {
         std::string strValue = std::string((yyvsp[(3) - (3)].strValue)).substr(1, strlen((yyvsp[(3) - (3)].strValue)) - 2); // Remove quotes
         outputBuffer << strValue;
@@ -1566,7 +1567,7 @@ yyreduce:
   case 30:
 
 /* Line 1464 of yacc.c  */
-#line 111 "parser.y"
+#line 112 "parser.y"
     {
         if(outputBuffer.str().back() != ' ')
             outputBuffer << " ";
@@ -1577,7 +1578,7 @@ yyreduce:
   case 31:
 
 /* Line 1464 of yacc.c  */
-#line 116 "parser.y"
+#line 117 "parser.y"
     {
         std::string strValue = std::string((yyvsp[(3) - (3)].strValue)).substr(1, strlen((yyvsp[(3) - (3)].strValue)) - 2); // Remove quotes
         if (outputBuffer.str().back() != ' ' && !strValue.empty() && strValue[0] != ' ') {
@@ -1590,7 +1591,7 @@ yyreduce:
   case 32:
 
 /* Line 1464 of yacc.c  */
-#line 126 "parser.y"
+#line 127 "parser.y"
     {
         int temp;
         std::cout << "Enter value for " << (yyvsp[(3) - (3)].strValue) << ": ";
@@ -1603,7 +1604,7 @@ yyreduce:
   case 33:
 
 /* Line 1464 of yacc.c  */
-#line 133 "parser.y"
+#line 134 "parser.y"
     {
         int temp;
         std::cout << "Enter value for " << (yyvsp[(3) - (3)].strValue) << ": ";
@@ -1616,7 +1617,7 @@ yyreduce:
 
 
 /* Line 1464 of yacc.c  */
-#line 1620 "parser.tab.c"
+#line 1621 "parser.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -1828,24 +1829,63 @@ yyreturn:
 
 
 /* Line 1684 of yacc.c  */
-#line 141 "parser.y"
+#line 142 "parser.y"
 
-int main() {
+int main(int argc, char *argv[]) {
+    int choice;
     std::string line;
     std::stringstream accumulatedInput;
+    std::cout << "Select input method:\n";
+    std::cout << "1. Enter code via terminal\n";
+    std::cout << "2. Read code from a text file\n";
+    std::cout << "Enter choice (1 or 2): ";
+    std::cin >> choice;
+    std::cin.ignore();
 
-    std::cout << "Enter your code (type 'end' to finish):\n";
-    while (true) {
-        std::getline(std::cin, line);
-        if (line == "end") {
-            break;
+    if (choice == 1) {
+        std::cout << "Enter your code (type 'end' to finish):\n";
+           while (true) {
+               std::getline(std::cin, line);
+               if (line == "end") {
+                   break;
+               }
+               accumulatedInput << line << '\n';
+           }
+           yy_scan_string(accumulatedInput.str().c_str());
+    } else if (choice == 2) {
+        std::string filepath;
+        bool fileOpened = false;
+        while (!fileOpened) {
+            std::cout << "Enter the path to the text file (or type 'exit' to quit): ";
+            std::getline(std::cin, filepath);
+
+            if (filepath == "exit") {
+                break;
+            }
+            yyin = fopen(filepath.c_str(), "r");
+
+            if (yyin) {
+                fileOpened = true;
+            } else {
+                perror("Error opening file");
+                std::cout << "Please try again or type 'exit' to quit.\n";
+            }
         }
-        accumulatedInput << line << '\n';
+        if (!fileOpened) {
+            std::cout << "No file was opened. Exiting program." << std::endl;
+            return 1;
+        }
+    } else {
+        std::cerr << "Invalid choice." << std::endl;
+        return 1;
     }
 
-    yy_scan_string(accumulatedInput.str().c_str());
     errorOccurred = false;
     yyparse();
+
+    if (yyin != nullptr) {
+        fclose(yyin);
+    }
 
     if (errorOccurred) {
         std::cerr << errorBuffer.str();
