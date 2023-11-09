@@ -16,6 +16,7 @@ int                     { print_token("Keyword", yytext, yylineno); return INT; 
 main                    { print_token("Identifier", yytext, yylineno); return MAIN; }
 if                      { print_token("Keyword", yytext, yylineno); return IF; }
 else                    { print_token("Keyword", yytext, yylineno); return ELSE; }
+while                   { print_token("Keyword", yytext, yylineno); return WHILE; }
 "("                     { print_token("Operator", yytext, yylineno); return LEFT_PAREN; }
 ")"                     { print_token("Operator", yytext, yylineno); return RIGHT_PAREN; }
 "{"                     { print_token("Operator", yytext, yylineno); return LEFT_BRACE; }

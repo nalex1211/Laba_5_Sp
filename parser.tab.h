@@ -59,13 +59,14 @@
      GREATER_EQUAL = 276,
      LESS_EQUAL = 277,
      EQUAL = 278,
-     IDENTIFIER = 279,
-     STRING = 280,
-     NUMBER = 281,
-     MINUS = 282,
-     PLUS = 283,
-     DIVIDE = 284,
-     MULTIPLY = 285
+     WHILE = 279,
+     IDENTIFIER = 280,
+     STRING = 281,
+     NUMBER = 282,
+     MINUS = 283,
+     PLUS = 284,
+     DIVIDE = 285,
+     MULTIPLY = 286
    };
 #endif
 
@@ -84,7 +85,7 @@ typedef union YYSTYPE
 
 
 /* Line 1685 of yacc.c  */
-#line 88 "parser.tab.h"
+#line 89 "parser.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

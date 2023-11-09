@@ -18,7 +18,7 @@ void yy_scan_string(const char *);
 }
 %token INT MAIN LEFT_BRACE RIGHT_BRACE SEMICOLON RETURN COUT CIN OUTPUT INPUT LEFT_PAREN RIGHT_PAREN IF ELSE
 %token ASSIGN COMMA GREATER_THAN LESS_THAN GREATER_EQUAL LESS_EQUAL EQUAL
-
+%token WHILE
 %type <strValue> cin_target_list
 %type <intValue> expression
 %type <intValue> condition
@@ -60,28 +60,35 @@ statement:
     {
         std::cout << "Processed return statement.\n";
     }
-     | declaration SEMICOLON
-        {
-            std::cout << "Processed variable declaration(s).\n";
-        }
+    | declaration SEMICOLON
+    {
+        std::cout << "Processed variable declaration(s).\n";
+    }
     | assignment SEMICOLON
     {
         std::cout << "Processed assignment.\n";
     }
     | IF LEFT_PAREN condition RIGHT_PAREN LEFT_BRACE statements RIGHT_BRACE
-        {
-            if ($3) {
-                // Execute statements inside the if block.
-            }
+    {
+        if ($3) {
+            // Execute statements inside the if block.
         }
-        | IF LEFT_PAREN condition RIGHT_PAREN LEFT_BRACE statements RIGHT_BRACE ELSE LEFT_BRACE statements RIGHT_BRACE
-        {
-            if ($3) {
-                // Execute statements inside the if block.
-            } else {
-                // Execute statements inside the else block.
-            }
+    }
+    | IF LEFT_PAREN condition RIGHT_PAREN LEFT_BRACE statements RIGHT_BRACE ELSE LEFT_BRACE statements RIGHT_BRACE
+    {
+        if ($3) {
+            // Execute statements inside the if block.
+        } else {
+            // Execute statements inside the else block.
         }
+    }
+    | WHILE LEFT_PAREN condition RIGHT_PAREN LEFT_BRACE statements RIGHT_BRACE
+    {
+        std::cout << "Parsed while loop with condition.\n";
+        while ($3) {
+            // Execute statements inside the while block.
+        }
+    }
     ;
 
 condition:
