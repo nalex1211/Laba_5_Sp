@@ -1,145 +1,245 @@
 %{
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <string>
 #include <iostream>
-#include <sstream>
 #include <map>
-#include <cstdio>
-
+#include <sstream>
+#include <string>
 std::map<std::string, int> variables;
-bool errorOccurred = false;
-std::stringstream outputBuffer;
-std::stringstream errorBuffer;
-
-extern void yy_scan_string(const char *);
-extern int yylex();
-extern void yyerror(const char *s);
+std::stringstream syntaxBuffer;
+int yylex();
+void yyerror(const char *s);
 extern FILE *yyin;
+extern int yylineno;
+void yy_scan_string(const char *);
 %}
+
 %union {
     int intValue;
     char* strValue;
 }
+%token INT MAIN LEFT_BRACE RIGHT_BRACE SEMICOLON RETURN COUT CIN OUTPUT INPUT LEFT_PAREN RIGHT_PAREN IF ELSE
+%token ASSIGN COMMA GREATER_THAN LESS_THAN GREATER_EQUAL LESS_EQUAL EQUAL
 
+%type <strValue> cin_target_list
+%type <intValue> expression
+%type <intValue> condition
 %token <strValue> IDENTIFIER STRING
 %token <intValue> NUMBER
-%type <intValue> expression
-%token INT
-%token ASSIGN SEMICOLON
-%token MAIN LEFT_BRACE RIGHT_BRACE RETURN
-%token COMMA
-%token LEFT_PAREN RIGHT_PAREN
-%token COUT OUTPUT
-%token CIN INPUT
-%left OUTPUT
+%type <strValue> declaration
 
-%left '+' '-'
-%left '*' '/'
-
+%left PLUS MINUS
+%left MULTIPLY DIVIDE
 %%
 
 program:
-    INT MAIN LEFT_PAREN RIGHT_PAREN LEFT_BRACE statement_list RIGHT_BRACE
-    | statement_list
+   INT MAIN LEFT_PAREN RIGHT_PAREN LEFT_BRACE statements RIGHT_BRACE
+    {
+        // Parsing complete, main function syntax is correct
+        std::cout << "Parsed main function successfully.\n";
+    }
     ;
 
-statement_list:
-    statement_list statement
-    |
+statements:
+    /* empty */
+    | statements statement
     ;
 
 statement:
-    declaration SEMICOLON
-    | declaration { yyerror("Cannot run the program, semicolon is missing after declaration"); }
-    | assignment SEMICOLON
-    | cin_statement SEMICOLON
-    | cin_statement { yyerror("Cannot run the program, semicolon is missing after cin statement"); }
-    | expression SEMICOLON { outputBuffer << "Expression result: " << $1 << "\n"; }
+    expression SEMICOLON
+    {
+        std::cout << "Evaluated an expression.\n";
+    }
     | cout_statement SEMICOLON
-    | RETURN expression SEMICOLON { outputBuffer << "Return value: " << $2 << "\n"; }
-    | error SEMICOLON { yyerror("Syntax error"); }
+    {
+        std::cout << "Processed cout statement.\n";
+    }
+    | cin_statement SEMICOLON
+    {
+        std::cout << "Processed cin statement.\n";
+    }
+    | RETURN expression SEMICOLON
+    {
+        std::cout << "Processed return statement.\n";
+    }
+     | declaration SEMICOLON
+        {
+            std::cout << "Processed variable declaration(s).\n";
+        }
+    | assignment SEMICOLON
+    {
+        std::cout << "Processed assignment.\n";
+    }
+    | IF LEFT_PAREN condition RIGHT_PAREN LEFT_BRACE statements RIGHT_BRACE
+        {
+            if ($3) {
+                // Execute statements inside the if block.
+            }
+        }
+        | IF LEFT_PAREN condition RIGHT_PAREN LEFT_BRACE statements RIGHT_BRACE ELSE LEFT_BRACE statements RIGHT_BRACE
+        {
+            if ($3) {
+                // Execute statements inside the if block.
+            } else {
+                // Execute statements inside the else block.
+            }
+        }
+    ;
+
+condition:
+    expression GREATER_THAN expression
+    {
+        $$ = ($1 > $3);
+    }
+    | expression LESS_THAN expression
+    {
+        $$ = ($1 < $3);
+    }
+    | expression GREATER_EQUAL expression
+    {
+        $$ = ($1 >= $3);
+    }
+    | expression LESS_EQUAL expression
+    {
+        $$ = ($1 <= $3);
+    }
+    | expression EQUAL expression
+    {
+        $$ = ($1 == $3);
+    }
     ;
 
 declaration:
-    INT var_list { outputBuffer << "Declaration completed\n"; }
-    | INT SEMICOLON { outputBuffer << "Type declaration without variable\n"; }
+    INT declaration_list
+    {
+        // The action associated with this rule will be defined in declaration_list
+    }
     ;
 
-var_list:
-    var_list COMMA IDENTIFIER { outputBuffer << "Declared variable: " << $3 << "\n"; }
-    | IDENTIFIER { outputBuffer << "Declared variable: " << $1 << "\n"; }
-    | IDENTIFIER ASSIGN expression {
-        variables[$1] = $3;
-        outputBuffer << "Declared and assigned: " << $1 << " = " << $3 << "\n";
-        free($1);
+declaration_list:
+    IDENTIFIER
+    {
+        variables[$1] = 0; // Default initialization to 0
+        std::cout << "Declared int variable " << $1 << " with default value 0.\n";
+    }
+    | declaration_list COMMA IDENTIFIER
+    {
+        variables[$3] = 0; // Default initialization to 0
+        std::cout << "Declared int variable " << $3 << " with default value 0.\n";
     }
     ;
 
 assignment:
-    IDENTIFIER ASSIGN expression {
-        variables[$1] = $3;
-        outputBuffer << "Assigned " << $1 << " = " << $3 << "\n";
-        free($1);
+    IDENTIFIER ASSIGN expression
+    {
+        std::string var($1);
+        if(variables.find(var) != variables.end()) {
+            variables[var] = $3;
+            std::cout << "Assigned value " << $3 << " to variable " << var << ".\n";
+        } else {
+            yyerror("Variable not declared");
+        }
+    }
+    ;
+
+cout_statement:
+    cout_target_list
+    ;
+
+cout_target_list:
+    COUT OUTPUT cout_content
+    {
+        std::cout << "Output: ";
+    }
+    | cout_target_list OUTPUT cout_content
+    {
+        // Empty, as it's just chaining the OUTPUT operation
+    }
+    ;
+
+cout_content:
+    STRING
+    {
+        std::cout << $1; // Directly output the string literal
+    }
+    | expression
+    {
+        std::cout << $1; // Output the evaluated expression's value
+    }
+    ;
+
+
+cin_statement:
+    CIN cin_target_list
+    ;
+
+cin_target_list:
+    INPUT IDENTIFIER
+    {
+        std::cout << "Input statement for variable: " << $2 << std::endl;
+        int temp;
+        std::cin >> temp;
+        variables[std::string($2)] = temp;
+    }
+    | cin_target_list INPUT IDENTIFIER
+    {
+        std::cout << "Input statement for variable: " << $3 << std::endl;
+        int temp;
+        std::cin >> temp;
+        variables[std::string($3)] = temp;
     }
     ;
 
 expression:
     NUMBER
-    | IDENTIFIER {
-        if(variables.find($1) != variables.end()) {
-            $$ = variables[$1];
+    {
+        $$ = $1;
+    }
+    | IDENTIFIER
+    {
+        std::string var($1);
+        if(variables.find(var) != variables.end()) {
+            $$ = variables[var];
         } else {
             yyerror("Variable not initialized");
         }
     }
-    | expression '+' expression { $$ = $1 + $3; }
-    | expression '-' expression { $$ = $1 - $3; }
-    | expression '*' expression { $$ = $1 * $3; }
-    | expression '/' expression { $$ = $1 / $3; }
-    | '(' expression ')' { $$ = $2; }
-    ;
-
-cout_statement:
-    COUT OUTPUT expression {
-        outputBuffer << $3;
+    | expression PLUS expression
+    {
+        $$ = $1 + $3;
+        std::cout << "Addition expression evaluated.\n";
     }
-    | COUT OUTPUT STRING {
-        std::string strValue = std::string($3).substr(1, strlen($3) - 2);
-        outputBuffer << strValue;
+    | expression MINUS expression
+    {
+        $$ = $1 - $3;
+        std::cout << "Subtraction expression evaluated.\n";
     }
-    | cout_statement OUTPUT expression {
-        if(outputBuffer.str().back() != ' ')
-            outputBuffer << " ";
-        outputBuffer << $3;
+    | expression MULTIPLY expression
+    {
+        $$ = $1 * $3;
+        std::cout << "Multiplication expression evaluated.\n";
     }
-    | cout_statement OUTPUT STRING {
-        std::string strValue = std::string($3).substr(1, strlen($3) - 2);
-        if (outputBuffer.str().back() != ' ' && !strValue.empty() && strValue[0] != ' ') {
-            outputBuffer << " ";
+    | expression DIVIDE expression
+    {
+        if($3 == 0) {
+            yyerror("Division by zero");
+            $$ = 0;
+        } else {
+            $$ = $1 / $3;
         }
-        outputBuffer << strValue;
+        std::cout << "Division expression evaluated.\n";
+    }
+    | LEFT_PAREN expression RIGHT_PAREN
+    {
+        $$ = $2;
+        std::cout << "Parenthesized expression evaluated.\n";
     }
     ;
 
-cin_statement:
-    CIN INPUT IDENTIFIER {
-        int temp;
-        std::cout << "Enter value for " << $3 << ": ";
-        std::cin >> temp;
-        variables[$3] = temp;
-        free($3);
-    }
-    | cin_statement INPUT IDENTIFIER {
-        int temp;
-        std::cout << "Enter value for " << $3 << ": ";
-        std::cin >> temp;
-        variables[$3] = temp;
-        free($3);
-    }
-    ;
 %%
+
+void printSyntaxBuffer() {
+    std::cout << "Lexical Analysis:\n" << syntaxBuffer.str();
+}
+
 int main(int argc, char *argv[]) {
     int choice;
     std::string line;
@@ -188,31 +288,16 @@ int main(int argc, char *argv[]) {
         std::cerr << "Invalid choice." << std::endl;
         return 1;
     }
-
-    errorOccurred = false;
+    std::cout << "TOKEN\t\tTYPE\t\tLINE NUMBER\n";
     yyparse();
 
     if (yyin != nullptr) {
         fclose(yyin);
     }
 
-    if (errorOccurred) {
-        std::cerr << errorBuffer.str();
-    } else {
-        std::cout << outputBuffer.str();
-    }
-
     return 0;
 }
 
 void yyerror(const char *s) {
-    errorBuffer << s << std::endl;
-    errorOccurred = true;
-}
-
-void checkErrors() {
-    if(errorOccurred) {
-        std::cerr << "Errors occurred during parsing." << std::endl;
-        exit(1);
-    }
+    fprintf(stderr, "%s at line %d\n", s, yylineno);
 }
