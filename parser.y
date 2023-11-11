@@ -4,6 +4,7 @@
 #include <sstream>
 #include <string>
 std::map<std::string, int> variables;
+std::map<std::string, float> float_variables;
 std::stringstream syntaxBuffer;
 int yylex();
 void yyerror(const char *s);
@@ -15,9 +16,11 @@ void yy_scan_string(const char *);
 %union {
     int intValue;
     char* strValue;
+    float floatValue;
 }
 %token INT MAIN LEFT_BRACE RIGHT_BRACE SEMICOLON RETURN COUT CIN OUTPUT INPUT LEFT_PAREN RIGHT_PAREN IF ELSE
 %token ASSIGN COMMA GREATER_THAN LESS_THAN GREATER_EQUAL LESS_EQUAL EQUAL
+%token <floatValue> FLOAT
 %token WHILE
 %type <strValue> cin_target_list
 %type <intValue> expression
@@ -25,6 +28,7 @@ void yy_scan_string(const char *);
 %token <strValue> IDENTIFIER STRING
 %token <intValue> NUMBER
 %type <strValue> declaration
+
 
 %left PLUS MINUS
 %left MULTIPLY DIVIDE
@@ -115,37 +119,56 @@ condition:
     ;
 
 declaration:
-    INT declaration_list
+    INT declaration_list_int
     {
-        // The action associated with this rule will be defined in declaration_list
+        // Handle int declarations
     }
-    ;
-
-declaration_list:
+    | FLOAT declaration_list_float
+    {
+        // Handle float declarations
+    }
+;
+declaration_list_int:
     IDENTIFIER
     {
-        variables[$1] = 0; // Default initialization to 0
+        variables[$1] = 0; // Default initialization to 0 for int
         std::cout << "Declared int variable " << $1 << " with default value 0.\n";
     }
-    | declaration_list COMMA IDENTIFIER
+    | declaration_list_int COMMA IDENTIFIER
     {
-        variables[$3] = 0; // Default initialization to 0
+        variables[$3] = 0; // Default initialization to 0 for int
         std::cout << "Declared int variable " << $3 << " with default value 0.\n";
     }
-    ;
+;
+
+declaration_list_float:
+    IDENTIFIER
+    {
+        float_variables[$1] = 0.0; // Default initialization to 0.0 for float
+        std::cout << "Declared float variable " << $1 << " with default value 0.0.\n";
+    }
+    | declaration_list_float COMMA IDENTIFIER
+    {
+        float_variables[$3] = 0.0; // Default initialization to 0.0 for float
+        std::cout << "Declared float variable " << $3 << " with default value 0.0.\n";
+    }
+;
 
 assignment:
     IDENTIFIER ASSIGN expression
     {
         std::string var($1);
-        if(variables.find(var) != variables.end()) {
-            variables[var] = $3;
-            std::cout << "Assigned value " << $3 << " to variable " << var << ".\n";
+        if (variables.find(var) != variables.end()) {
+            variables[var] = static_cast<int>($3); // Cast to int if it's in the int map
+            std::cout << "Assigned int value " << $3 << " to variable " << var << ".\n";
+        } else if (float_variables.find(var) != float_variables.end()) {
+            float_variables[var] = $3; // Assign directly if it's in the float map
+            std::cout << "Assigned float value " << $3 << " to variable " << var << ".\n";
         } else {
             yyerror("Variable not declared");
         }
     }
-    ;
+;
 
 cout_statement:
     cout_target_list
@@ -209,6 +232,10 @@ expression:
             yyerror("Variable not initialized");
         }
     }
+    | FLOAT
+        {
+            $$ = $1;
+        }
     | expression PLUS expression
     {
         $$ = $1 + $3;

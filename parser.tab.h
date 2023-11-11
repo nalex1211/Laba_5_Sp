@@ -59,14 +59,15 @@
      GREATER_EQUAL = 276,
      LESS_EQUAL = 277,
      EQUAL = 278,
-     WHILE = 279,
-     IDENTIFIER = 280,
-     STRING = 281,
-     NUMBER = 282,
-     MINUS = 283,
-     PLUS = 284,
-     DIVIDE = 285,
-     MULTIPLY = 286
+     FLOAT = 279,
+     WHILE = 280,
+     IDENTIFIER = 281,
+     STRING = 282,
+     NUMBER = 283,
+     MINUS = 284,
+     PLUS = 285,
+     DIVIDE = 286,
+     MULTIPLY = 287
    };
 #endif
 
@@ -77,15 +78,16 @@ typedef union YYSTYPE
 {
 
 /* Line 1685 of yacc.c  */
-#line 15 "parser.y"
+#line 16 "parser.y"
 
     int intValue;
     char* strValue;
+    float floatValue;
 
 
 
 /* Line 1685 of yacc.c  */
-#line 89 "parser.tab.h"
+#line 91 "parser.tab.h"
 } YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */

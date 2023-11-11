@@ -14,6 +14,8 @@ void print_token(const char* tokenType, const char* yytext, int yylineno);
 
 int                     { print_token("Keyword", yytext, yylineno); return INT; }
 main                    { print_token("Identifier", yytext, yylineno); return MAIN; }
+float                   { print_token("Keyword", yytext, yylineno); return FLOAT; }
+[0-9]+"."[0-9]+         { print_token("Float", yytext, yylineno); yylval.floatValue = atof(yytext); return FLOAT; }
 if                      { print_token("Keyword", yytext, yylineno); return IF; }
 else                    { print_token("Keyword", yytext, yylineno); return ELSE; }
 while                   { print_token("Keyword", yytext, yylineno); return WHILE; }
