@@ -3,9 +3,11 @@
 #include <map>
 #include <sstream>
 #include <string>
+#include <vector>
 std::map<std::string, int> variables;
 std::map<std::string, float> float_variables;
 std::stringstream syntaxBuffer;
+std::vector<std::string> errorMessages;
 int yylex();
 void yyerror(const char *s);
 extern FILE *yyin;
@@ -29,7 +31,7 @@ void yy_scan_string(const char *);
 %token <intValue> NUMBER
 %type <strValue> declaration
 
-
+%error-verbose
 %left PLUS MINUS
 %left MULTIPLY DIVIDE
 %%
@@ -134,10 +136,20 @@ declaration_list_int:
         variables[$1] = 0; // Default initialization to 0 for int
         std::cout << "Declared int variable " << $1 << " with default value 0.\n";
     }
+    | IDENTIFIER ASSIGN expression
+    {
+        variables[$1] = $3; // Initialize with the given expression
+        std::cout << "Declared int variable " << $1 << " with value " << $3 << ".\n";
+    }
     | declaration_list_int COMMA IDENTIFIER
     {
         variables[$3] = 0; // Default initialization to 0 for int
         std::cout << "Declared int variable " << $3 << " with default value 0.\n";
+    }
+    | declaration_list_int COMMA IDENTIFIER ASSIGN expression
+    {
+        variables[$3] = $5; // Initialize with the given expression
+        std::cout << "Declared int variable " << $3 << " with value " << $5 << ".\n";
     }
 ;
 
@@ -147,12 +159,23 @@ declaration_list_float:
         float_variables[$1] = 0.0; // Default initialization to 0.0 for float
         std::cout << "Declared float variable " << $1 << " with default value 0.0.\n";
     }
+    | IDENTIFIER ASSIGN expression
+    {
+        float_variables[$1] = $3; // Initialize with the given expression
+        std::cout << "Declared float variable " << $1 << " with value " << $3 << ".\n";
+    }
     | declaration_list_float COMMA IDENTIFIER
     {
         float_variables[$3] = 0.0; // Default initialization to 0.0 for float
         std::cout << "Declared float variable " << $3 << " with default value 0.0.\n";
     }
+    | declaration_list_float COMMA IDENTIFIER ASSIGN expression
+    {
+        float_variables[$3] = $5; // Initialize with the given expression
+        std::cout << "Declared float variable " << $3 << " with value " << $5 << ".\n";
+    }
 ;
+
 
 assignment:
     IDENTIFIER ASSIGN expression
@@ -224,14 +247,18 @@ expression:
         $$ = $1;
     }
     | IDENTIFIER
-    {
-        std::string var($1);
-        if(variables.find(var) != variables.end()) {
-            $$ = variables[var];
-        } else {
-            yyerror("Variable not initialized");
+        {
+            std::string var($1);
+            if(variables.find(var) != variables.end()) {
+                $$ = variables[var];
+            } else if(float_variables.find(var) != float_variables.end()) {
+                $$ = float_variables[var];
+            } else {
+                std::stringstream errMsg;
+                errMsg << "Variable '" << var << "' not declared or initialized";
+                yyerror(errMsg.str().c_str());
+            }
         }
-    }
     | FLOAT
         {
             $$ = $1;
@@ -324,14 +351,21 @@ int main(int argc, char *argv[]) {
     }
     std::cout << "TOKEN\t\tTYPE\t\tLINE NUMBER\n";
     yyparse();
-
+    if (!errorMessages.empty()) {
+        std::cerr << "Syntax errors:" << std::endl;
+        for (const auto& msg : errorMessages) {
+            std::cerr << msg << std::endl;
+        }
+    }
     if (yyin != nullptr) {
         fclose(yyin);
     }
 
     return 0;
 }
-
 void yyerror(const char *s) {
-    fprintf(stderr, "%s at line %d\n", s, yylineno);
+    std::stringstream error;
+    error << s << " at line " << yylineno;
+    errorMessages.push_back(error.str()); // Save error message
 }
+

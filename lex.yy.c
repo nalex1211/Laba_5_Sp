@@ -1,6 +1,5 @@
-#line 2 "lex.yy.c"
 
-#line 4 "lex.yy.c"
+#line 3 "lex.yy.c"
 
 #define  YY_INT_ALIGNED short int
 
@@ -533,7 +532,7 @@ char *yytext;
 #include <iostream>
 
 void print_token(const char* tokenType, const char* yytext, int yylineno);
-#line 537 "lex.yy.c"
+#line 536 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -723,7 +722,7 @@ YY_DECL
 #line 13 "lexer.l"
 
 
-#line 727 "lex.yy.c"
+#line 726 "lex.yy.c"
 
 	if ( !(yy_init) )
 		{
@@ -991,7 +990,7 @@ YY_RULE_SETUP
 #line 54 "lexer.l"
 ECHO;
 	YY_BREAK
-#line 995 "lex.yy.c"
+#line 994 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2008,4 +2007,3 @@ void yyfree (void * ptr )
 void print_token(const char* tokenType, const char* yytext, int yylineno) {
     std::cout << yytext << "\t\t" << tokenType << "\t\t" << yylineno << "\n";
 }
-
