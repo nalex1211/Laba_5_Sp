@@ -155,24 +155,25 @@ declaration_list_float:
     IDENTIFIER
     {
         float_variables[$1] = 0.0; // Default initialization to 0.0 for float
-        std::cout << "Declared float variable " << $1 << " with default value 0.0.\n";
+        std::cout << "Declared float variable " << $1 << " with default value 0.0\n";
     }
-    | IDENTIFIER ASSIGN expression
+    | IDENTIFIER ASSIGN FLOAT
     {
-        float_variables[$1] = $3; // Initialize with the given expression
-        std::cout << "Declared float variable " << $1 << " with value " << $3 << ".\n";
+        float_variables[$1] = yylval.floatValue; // Initialize with the given float value
+        std::cout << "Declared float variable " << $1 << " with value " << yylval.floatValue << "\n";
     }
     | declaration_list_float COMMA IDENTIFIER
     {
         float_variables[$3] = 0.0; // Default initialization to 0.0 for float
-        std::cout << "Declared float variable " << $3 << " with default value 0.0.\n";
+        std::cout << "Declared float variable " << $3 << " with default value 0.0\n";
     }
-    | declaration_list_float COMMA IDENTIFIER ASSIGN expression
+    | declaration_list_float COMMA IDENTIFIER ASSIGN FLOAT
     {
-        float_variables[$3] = $5; // Initialize with the given expression
-        std::cout << "Declared float variable " << $3 << " with value " << $5 << ".\n";
+        float_variables[$3] = yylval.floatValue; // Initialize with the given float value
+        std::cout << "Declared float variable " << $3 << " with value " << yylval.floatValue << "\n";
     }
 ;
+
 
 
 assignment:
