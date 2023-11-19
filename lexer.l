@@ -54,7 +54,7 @@ cin                     { print_token("Identifier", yytext, yylineno); return CI
 }
 
 [a-zA-Z_][a-zA-Z_0-9]*  { print_token("Identifier", yytext, yylineno); yylval.strValue = strdup(yytext); return IDENTIFIER; }
-[ \t\n]+                { /* Ignore whitespace */ }
+[ \t\n]+                {  }
 .                       { print_token("Unknown", yytext, yylineno); return *yytext; }
 
 %%

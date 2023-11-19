@@ -41,7 +41,7 @@ void yy_scan_string(const char *);
 program:
     includes INT MAIN LEFT_PAREN RIGHT_PAREN LEFT_BRACE statements RIGHT_BRACE
     {
-        // Parsing complete, main function syntax is correct
+
         std::cout << "Parsed main function successfully.\n";
     }
     ;
@@ -49,12 +49,12 @@ program:
 includes:
     | includes INCLUDE_DIRECTIVE
     {
-        // Just recognize and report the include directive
+
     }
     ;
 
 statements:
-    /* empty */
+
     | statements statement
     ;
 
@@ -86,38 +86,38 @@ statement:
     | IF LEFT_PAREN condition RIGHT_PAREN LEFT_BRACE statements RIGHT_BRACE
     {
         if ($3) {
-            // Execute statements inside the if block.
+
         }
     }
     | IF LEFT_PAREN condition RIGHT_PAREN LEFT_BRACE statements RIGHT_BRACE ELSE LEFT_BRACE statements RIGHT_BRACE
     {
         if ($3) {
-            // Execute statements inside the if block.
+
         } else {
-            // Execute statements inside the else block.
+
         }
     }
    | WHILE LEFT_PAREN condition RIGHT_PAREN LEFT_BRACE statements RIGHT_BRACE
        {
            std::cout << "Parsed while loop with condition.\n";
-           // Just parse the contents without executing
+
        }
    | FOR LEFT_PAREN for_initialization SEMICOLON condition SEMICOLON for_increment RIGHT_PAREN LEFT_BRACE statements RIGHT_BRACE
        {
            std::cout << "Parsed for loop.\n";
-           // Just parse the contents without executing
+
        }
        ;
 
 
 for_initialization:
-    // Rule to handle initialization part of for loop (e.g., 'int i = 0')
+
     declaration
     | assignment
     ;
 
 for_increment:
-    // Rule to handle increment part of for loop (e.g., 'i = i + 1')
+
     assignment
     ;
 
@@ -147,32 +147,32 @@ condition:
 declaration:
     INT declaration_list_int
     {
-        // Handle int declarations
+
     }
     | FLOAT declaration_list_float
     {
-        // Handle float declarations
+
     }
 ;
 declaration_list_int:
     IDENTIFIER
     {
-        variables[$1] = 0; // Default initialization to 0 for int
+        variables[$1] = 0;
         std::cout << "Declared int variable " << $1 << " with default value 0.\n";
     }
     | IDENTIFIER ASSIGN expression
     {
-        variables[$1] = $3; // Initialize with the given expression
+        variables[$1] = $3;
         std::cout << "Declared int variable " << $1 << " with value " << $3 << ".\n";
     }
     | declaration_list_int COMMA IDENTIFIER
     {
-        variables[$3] = 0; // Default initialization to 0 for int
+        variables[$3] = 0;
         std::cout << "Declared int variable " << $3 << " with default value 0.\n";
     }
     | declaration_list_int COMMA IDENTIFIER ASSIGN expression
     {
-        variables[$3] = $5; // Initialize with the given expression
+        variables[$3] = $5;
         std::cout << "Declared int variable " << $3 << " with value " << $5 << ".\n";
     }
 ;
@@ -180,22 +180,22 @@ declaration_list_int:
 declaration_list_float:
     IDENTIFIER
     {
-        float_variables[$1] = 0.0; // Default initialization to 0.0 for float
+        float_variables[$1] = 0.0;
         std::cout << "Declared float variable " << $1 << " with default value 0.0\n";
     }
     | IDENTIFIER ASSIGN FLOAT
     {
-        float_variables[$1] = yylval.floatValue; // Initialize with the given float value
+        float_variables[$1] = yylval.floatValue;
         std::cout << "Declared float variable " << $1 << " with value " << yylval.floatValue << "\n";
     }
     | declaration_list_float COMMA IDENTIFIER
     {
-        float_variables[$3] = 0.0; // Default initialization to 0.0 for float
+        float_variables[$3] = 0.0;
         std::cout << "Declared float variable " << $3 << " with default value 0.0\n";
     }
     | declaration_list_float COMMA IDENTIFIER ASSIGN FLOAT
     {
-        float_variables[$3] = yylval.floatValue; // Initialize with the given float value
+        float_variables[$3] = yylval.floatValue;
         std::cout << "Declared float variable " << $3 << " with value " << yylval.floatValue << "\n";
     }
 ;
@@ -207,10 +207,10 @@ assignment:
     {
         std::string var($1);
         if (variables.find(var) != variables.end()) {
-            variables[var] = static_cast<int>($3); // Cast to int if it's in the int map
+            variables[var] = static_cast<int>($3);
             std::cout << "Assigned int value " << $3 << " to variable " << var << ".\n";
         } else if (float_variables.find(var) != float_variables.end()) {
-            float_variables[var] = $3; // Assign directly if it's in the float map
+            float_variables[var] = $3;
             std::cout << "Assigned float value " << $3 << " to variable " << var << ".\n";
         } else {
             yyerror("Variable not declared");
@@ -229,18 +229,18 @@ cout_target_list:
     }
     | cout_target_list OUTPUT cout_content
     {
-        // Empty, as it's just chaining the OUTPUT operation
+
     }
     ;
 
 cout_content:
     STRING
     {
-        std::cout << $1; // Directly output the string literal
+        std::cout << $1;
     }
     | expression
     {
-        std::cout << $1; // Output the evaluated expression's value
+        std::cout << $1;
     }
     ;
 
@@ -391,6 +391,6 @@ int main(int argc, char *argv[]) {
 void yyerror(const char *s) {
     std::stringstream error;
     error << s << " at line " << yylineno;
-    errorMessages.push_back(error.str()); // Save error message
+    errorMessages.push_back(error.str());
 }
 
