@@ -88,14 +88,12 @@ statement:
             // Execute statements inside the else block.
         }
     }
-    | WHILE LEFT_PAREN condition RIGHT_PAREN LEFT_BRACE statements RIGHT_BRACE
-    {
-        std::cout << "Parsed while loop with condition.\n";
-        while ($3) {
-            // Execute statements inside the while block.
-        }
-    }
-    ;
+   | WHILE LEFT_PAREN condition RIGHT_PAREN LEFT_BRACE statements RIGHT_BRACE
+       {
+           std::cout << "Parsed while loop with condition.\n";
+           // Just parse the contents without executing
+       }
+       ;
 
 condition:
     expression GREATER_THAN expression

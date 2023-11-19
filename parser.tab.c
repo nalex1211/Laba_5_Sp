@@ -480,10 +480,10 @@ static const yytype_int8 yyrhs[] =
 static const yytype_uint16 yyrline[] =
 {
        0,    40,    40,    47,    49,    53,    57,    61,    65,    69,
-      73,    77,    83,    91,   101,   105,   109,   113,   117,   124,
-     128,   134,   139,   144,   149,   157,   162,   167,   172,   181,
-     197,   201,   205,   212,   216,   224,   228,   235,   245,   249,
-     262,   266,   271,   276,   281,   291
+      73,    77,    83,    91,    99,   103,   107,   111,   115,   122,
+     126,   132,   137,   142,   147,   155,   160,   165,   170,   179,
+     195,   199,   203,   210,   214,   222,   226,   233,   243,   247,
+     260,   264,   269,   274,   279,   289
 };
 #endif
 
@@ -1557,17 +1557,15 @@ yyreduce:
 /* Line 1464 of yacc.c  */
 #line 92 "parser.y"
     {
-        std::cout << "Parsed while loop with condition.\n";
-        while ((yyvsp[(3) - (7)].intValue)) {
-            // Execute statements inside the while block.
-        }
-    ;}
+           std::cout << "Parsed while loop with condition.\n";
+           // Just parse the contents without executing
+       ;}
     break;
 
   case 14:
 
 /* Line 1464 of yacc.c  */
-#line 102 "parser.y"
+#line 100 "parser.y"
     {
         (yyval.intValue) = ((yyvsp[(1) - (3)].intValue) > (yyvsp[(3) - (3)].intValue));
     ;}
@@ -1576,7 +1574,7 @@ yyreduce:
   case 15:
 
 /* Line 1464 of yacc.c  */
-#line 106 "parser.y"
+#line 104 "parser.y"
     {
         (yyval.intValue) = ((yyvsp[(1) - (3)].intValue) < (yyvsp[(3) - (3)].intValue));
     ;}
@@ -1585,7 +1583,7 @@ yyreduce:
   case 16:
 
 /* Line 1464 of yacc.c  */
-#line 110 "parser.y"
+#line 108 "parser.y"
     {
         (yyval.intValue) = ((yyvsp[(1) - (3)].intValue) >= (yyvsp[(3) - (3)].intValue));
     ;}
@@ -1594,7 +1592,7 @@ yyreduce:
   case 17:
 
 /* Line 1464 of yacc.c  */
-#line 114 "parser.y"
+#line 112 "parser.y"
     {
         (yyval.intValue) = ((yyvsp[(1) - (3)].intValue) <= (yyvsp[(3) - (3)].intValue));
     ;}
@@ -1603,7 +1601,7 @@ yyreduce:
   case 18:
 
 /* Line 1464 of yacc.c  */
-#line 118 "parser.y"
+#line 116 "parser.y"
     {
         (yyval.intValue) = ((yyvsp[(1) - (3)].intValue) == (yyvsp[(3) - (3)].intValue));
     ;}
@@ -1612,7 +1610,7 @@ yyreduce:
   case 19:
 
 /* Line 1464 of yacc.c  */
-#line 125 "parser.y"
+#line 123 "parser.y"
     {
         // Handle int declarations
     ;}
@@ -1621,7 +1619,7 @@ yyreduce:
   case 20:
 
 /* Line 1464 of yacc.c  */
-#line 129 "parser.y"
+#line 127 "parser.y"
     {
         // Handle float declarations
     ;}
@@ -1630,7 +1628,7 @@ yyreduce:
   case 21:
 
 /* Line 1464 of yacc.c  */
-#line 135 "parser.y"
+#line 133 "parser.y"
     {
         variables[(yyvsp[(1) - (1)].strValue)] = 0; // Default initialization to 0 for int
         std::cout << "Declared int variable " << (yyvsp[(1) - (1)].strValue) << " with default value 0.\n";
@@ -1640,7 +1638,7 @@ yyreduce:
   case 22:
 
 /* Line 1464 of yacc.c  */
-#line 140 "parser.y"
+#line 138 "parser.y"
     {
         variables[(yyvsp[(1) - (3)].strValue)] = (yyvsp[(3) - (3)].intValue); // Initialize with the given expression
         std::cout << "Declared int variable " << (yyvsp[(1) - (3)].strValue) << " with value " << (yyvsp[(3) - (3)].intValue) << ".\n";
@@ -1650,7 +1648,7 @@ yyreduce:
   case 23:
 
 /* Line 1464 of yacc.c  */
-#line 145 "parser.y"
+#line 143 "parser.y"
     {
         variables[(yyvsp[(3) - (3)].strValue)] = 0; // Default initialization to 0 for int
         std::cout << "Declared int variable " << (yyvsp[(3) - (3)].strValue) << " with default value 0.\n";
@@ -1660,7 +1658,7 @@ yyreduce:
   case 24:
 
 /* Line 1464 of yacc.c  */
-#line 150 "parser.y"
+#line 148 "parser.y"
     {
         variables[(yyvsp[(3) - (5)].strValue)] = (yyvsp[(5) - (5)].intValue); // Initialize with the given expression
         std::cout << "Declared int variable " << (yyvsp[(3) - (5)].strValue) << " with value " << (yyvsp[(5) - (5)].intValue) << ".\n";
@@ -1670,7 +1668,7 @@ yyreduce:
   case 25:
 
 /* Line 1464 of yacc.c  */
-#line 158 "parser.y"
+#line 156 "parser.y"
     {
         float_variables[(yyvsp[(1) - (1)].strValue)] = 0.0; // Default initialization to 0.0 for float
         std::cout << "Declared float variable " << (yyvsp[(1) - (1)].strValue) << " with default value 0.0.\n";
@@ -1680,7 +1678,7 @@ yyreduce:
   case 26:
 
 /* Line 1464 of yacc.c  */
-#line 163 "parser.y"
+#line 161 "parser.y"
     {
         float_variables[(yyvsp[(1) - (3)].strValue)] = (yyvsp[(3) - (3)].intValue); // Initialize with the given expression
         std::cout << "Declared float variable " << (yyvsp[(1) - (3)].strValue) << " with value " << (yyvsp[(3) - (3)].intValue) << ".\n";
@@ -1690,7 +1688,7 @@ yyreduce:
   case 27:
 
 /* Line 1464 of yacc.c  */
-#line 168 "parser.y"
+#line 166 "parser.y"
     {
         float_variables[(yyvsp[(3) - (3)].strValue)] = 0.0; // Default initialization to 0.0 for float
         std::cout << "Declared float variable " << (yyvsp[(3) - (3)].strValue) << " with default value 0.0.\n";
@@ -1700,7 +1698,7 @@ yyreduce:
   case 28:
 
 /* Line 1464 of yacc.c  */
-#line 173 "parser.y"
+#line 171 "parser.y"
     {
         float_variables[(yyvsp[(3) - (5)].strValue)] = (yyvsp[(5) - (5)].intValue); // Initialize with the given expression
         std::cout << "Declared float variable " << (yyvsp[(3) - (5)].strValue) << " with value " << (yyvsp[(5) - (5)].intValue) << ".\n";
@@ -1710,7 +1708,7 @@ yyreduce:
   case 29:
 
 /* Line 1464 of yacc.c  */
-#line 182 "parser.y"
+#line 180 "parser.y"
     {
         std::string var((yyvsp[(1) - (3)].strValue));
         if (variables.find(var) != variables.end()) {
@@ -1728,7 +1726,7 @@ yyreduce:
   case 31:
 
 /* Line 1464 of yacc.c  */
-#line 202 "parser.y"
+#line 200 "parser.y"
     {
         std::cout << "Output: ";
     ;}
@@ -1737,7 +1735,7 @@ yyreduce:
   case 32:
 
 /* Line 1464 of yacc.c  */
-#line 206 "parser.y"
+#line 204 "parser.y"
     {
         // Empty, as it's just chaining the OUTPUT operation
     ;}
@@ -1746,7 +1744,7 @@ yyreduce:
   case 33:
 
 /* Line 1464 of yacc.c  */
-#line 213 "parser.y"
+#line 211 "parser.y"
     {
         std::cout << (yyvsp[(1) - (1)].strValue); // Directly output the string literal
     ;}
@@ -1755,7 +1753,7 @@ yyreduce:
   case 34:
 
 /* Line 1464 of yacc.c  */
-#line 217 "parser.y"
+#line 215 "parser.y"
     {
         std::cout << (yyvsp[(1) - (1)].intValue); // Output the evaluated expression's value
     ;}
@@ -1764,7 +1762,7 @@ yyreduce:
   case 36:
 
 /* Line 1464 of yacc.c  */
-#line 229 "parser.y"
+#line 227 "parser.y"
     {
         std::cout << "Input statement for variable: " << (yyvsp[(2) - (2)].strValue) << std::endl;
         int temp;
@@ -1776,7 +1774,7 @@ yyreduce:
   case 37:
 
 /* Line 1464 of yacc.c  */
-#line 236 "parser.y"
+#line 234 "parser.y"
     {
         std::cout << "Input statement for variable: " << (yyvsp[(3) - (3)].strValue) << std::endl;
         int temp;
@@ -1788,7 +1786,7 @@ yyreduce:
   case 38:
 
 /* Line 1464 of yacc.c  */
-#line 246 "parser.y"
+#line 244 "parser.y"
     {
         (yyval.intValue) = (yyvsp[(1) - (1)].intValue);
     ;}
@@ -1797,7 +1795,7 @@ yyreduce:
   case 39:
 
 /* Line 1464 of yacc.c  */
-#line 250 "parser.y"
+#line 248 "parser.y"
     {
             std::string var((yyvsp[(1) - (1)].strValue));
             if(variables.find(var) != variables.end()) {
@@ -1815,7 +1813,7 @@ yyreduce:
   case 40:
 
 /* Line 1464 of yacc.c  */
-#line 263 "parser.y"
+#line 261 "parser.y"
     {
             (yyval.intValue) = (yyvsp[(1) - (1)].floatValue);
         ;}
@@ -1824,7 +1822,7 @@ yyreduce:
   case 41:
 
 /* Line 1464 of yacc.c  */
-#line 267 "parser.y"
+#line 265 "parser.y"
     {
         (yyval.intValue) = (yyvsp[(1) - (3)].intValue) + (yyvsp[(3) - (3)].intValue);
         std::cout << "Addition expression evaluated.\n";
@@ -1834,7 +1832,7 @@ yyreduce:
   case 42:
 
 /* Line 1464 of yacc.c  */
-#line 272 "parser.y"
+#line 270 "parser.y"
     {
         (yyval.intValue) = (yyvsp[(1) - (3)].intValue) - (yyvsp[(3) - (3)].intValue);
         std::cout << "Subtraction expression evaluated.\n";
@@ -1844,7 +1842,7 @@ yyreduce:
   case 43:
 
 /* Line 1464 of yacc.c  */
-#line 277 "parser.y"
+#line 275 "parser.y"
     {
         (yyval.intValue) = (yyvsp[(1) - (3)].intValue) * (yyvsp[(3) - (3)].intValue);
         std::cout << "Multiplication expression evaluated.\n";
@@ -1854,7 +1852,7 @@ yyreduce:
   case 44:
 
 /* Line 1464 of yacc.c  */
-#line 282 "parser.y"
+#line 280 "parser.y"
     {
         if((yyvsp[(3) - (3)].intValue) == 0) {
             yyerror("Division by zero");
@@ -1869,7 +1867,7 @@ yyreduce:
   case 45:
 
 /* Line 1464 of yacc.c  */
-#line 292 "parser.y"
+#line 290 "parser.y"
     {
         (yyval.intValue) = (yyvsp[(2) - (3)].intValue);
         std::cout << "Parenthesized expression evaluated.\n";
@@ -1879,7 +1877,7 @@ yyreduce:
 
 
 /* Line 1464 of yacc.c  */
-#line 1883 "parser.tab.c"
+#line 1881 "parser.tab.c"
       default: break;
     }
   YY_SYMBOL_PRINT ("-> $$ =", yyr1[yyn], &yyval, &yyloc);
@@ -2091,7 +2089,7 @@ yyreturn:
 
 
 /* Line 1684 of yacc.c  */
-#line 298 "parser.y"
+#line 296 "parser.y"
 
 
 void printSyntaxBuffer() {
