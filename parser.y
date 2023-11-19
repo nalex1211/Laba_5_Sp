@@ -22,6 +22,7 @@ void yy_scan_string(const char *);
 }
 %token INT MAIN LEFT_BRACE RIGHT_BRACE SEMICOLON RETURN COUT CIN OUTPUT INPUT LEFT_PAREN RIGHT_PAREN IF ELSE
 %token ASSIGN COMMA GREATER_THAN LESS_THAN GREATER_EQUAL LESS_EQUAL EQUAL
+%token INCLUDE_DIRECTIVE
 %token <floatValue> FLOAT
 %token WHILE
 %type <strValue> cin_target_list
@@ -37,10 +38,17 @@ void yy_scan_string(const char *);
 %%
 
 program:
-   INT MAIN LEFT_PAREN RIGHT_PAREN LEFT_BRACE statements RIGHT_BRACE
+    includes INT MAIN LEFT_PAREN RIGHT_PAREN LEFT_BRACE statements RIGHT_BRACE
     {
         // Parsing complete, main function syntax is correct
         std::cout << "Parsed main function successfully.\n";
+    }
+    ;
+
+includes:
+    | includes INCLUDE_DIRECTIVE
+    {
+        // Just recognize and report the include directive
     }
     ;
 

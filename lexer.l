@@ -12,6 +12,11 @@ void print_token(const char* tokenType, const char* yytext, int yylineno);
 
 %%
 
+
+"#include"[ \t]*(<[^>]*>|\"[^\"]*\") {
+    print_token("Include Directive", yytext, yylineno);
+    return INCLUDE_DIRECTIVE;
+}
 int                     { print_token("Keyword", yytext, yylineno); return INT; }
 main                    { print_token("Identifier", yytext, yylineno); return MAIN; }
 float                   { print_token("Keyword", yytext, yylineno); return FLOAT; }
