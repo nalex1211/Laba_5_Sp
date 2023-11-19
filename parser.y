@@ -25,6 +25,7 @@ void yy_scan_string(const char *);
 %token INCLUDE_DIRECTIVE
 %token <floatValue> FLOAT
 %token WHILE
+%token FOR
 %type <strValue> cin_target_list
 %type <intValue> expression
 %type <intValue> condition
@@ -101,7 +102,24 @@ statement:
            std::cout << "Parsed while loop with condition.\n";
            // Just parse the contents without executing
        }
+   | FOR LEFT_PAREN for_initialization SEMICOLON condition SEMICOLON for_increment RIGHT_PAREN LEFT_BRACE statements RIGHT_BRACE
+       {
+           std::cout << "Parsed for loop.\n";
+           // Just parse the contents without executing
+       }
        ;
+
+
+for_initialization:
+    // Rule to handle initialization part of for loop (e.g., 'int i = 0')
+    declaration
+    | assignment
+    ;
+
+for_increment:
+    // Rule to handle increment part of for loop (e.g., 'i = i + 1')
+    assignment
+    ;
 
 condition:
     expression GREATER_THAN expression
